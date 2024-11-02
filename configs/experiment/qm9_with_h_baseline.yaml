@@ -1,0 +1,18 @@
+# @package _global_
+general:
+    name : 'qm9h_baseline'
+    gpus : 1
+    wandb: 'online'
+    evaluate_all_checkpoints: False
+    test_only: null
+    include_valence_loss: false
+    include_hybridization_loss: false
+train:
+    n_epochs: 10
+    batch_size: 512
+    save_model: True
+model:
+    n_layers: 7
+    lambda_train: [5, 0]
+dataset:
+    remove_h: False
