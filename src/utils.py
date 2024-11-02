@@ -132,8 +132,26 @@ class PlaceHolder:
 
 
 def setup_wandb(cfg):
+
+    run_name = cfg.general.name
+    if cfg.general.include_valence_loss and cfg.general.include_hybridization_loss:
+        run_name += "-with-valence-hybridization"
+    elif cfg.general.include_valence_loss:
+        run_name += "-with-valence"
+    elif cfg.general.include_hybridization_loss:
+        run_name += "-with-hybridization"
+    else:
+        run_name += "-baseline"
+
     config_dict = omegaconf.OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
-    kwargs = {'name': cfg.general.name, 'project': f'graph_ddm_{cfg.dataset.name}', 'config': config_dict,
-              'settings': wandb.Settings(_disable_stats=True), 'reinit': True, 'mode': cfg.general.wandb}
+    kwargs = {
+        'name': run_name,
+        'project': f'graph_ddm_{cfg.dataset.name}',
+        'config': config_dict,
+        'settings': wandb.Settings(_disable_stats=True),
+        'reinit': True,
+        'mode': cfg.general.wandb,
+    }
     wandb.init(**kwargs)
     wandb.save('*.txt')
+

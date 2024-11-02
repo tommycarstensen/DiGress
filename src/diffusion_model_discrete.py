@@ -39,7 +39,11 @@ class DiscreteDenoisingDiffusion(pl.LightningModule):
 
         self.dataset_info = dataset_infos
 
-        self.train_loss = TrainLossDiscrete(self.cfg.model.lambda_train)
+        self.train_loss = TrainLossDiscrete(
+            self.cfg.model.lambda_train,
+            include_valence_loss=self.cfg.general.include_valence_loss,
+            include_hybridization_loss=self.cfg.general.include_hybridization_loss,
+            )
 
         self.val_nll = NLL()
         self.val_X_kl = SumExceptBatchKL()
@@ -143,7 +147,10 @@ class DiscreteDenoisingDiffusion(pl.LightningModule):
                       f" -- {time.time() - self.start_epoch_time:.1f}s ")
         epoch_at_metrics, epoch_bond_metrics = self.train_metrics.log_epoch_metrics()
         self.print(f"Epoch {self.current_epoch}: {epoch_at_metrics} -- {epoch_bond_metrics}")
-        print(torch.cuda.memory_summary())
+        if torch.cuda.is_available():
+            print(torch.cuda.memory_summary())
+        else:
+            print("CUDA is not available. Skipping memory summary.")
 
     def on_validation_epoch_start(self) -> None:
         self.val_nll.reset()
