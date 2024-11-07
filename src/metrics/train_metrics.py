@@ -148,11 +148,11 @@ class TrainLossDiscrete(nn.Module):
     def calculate_valence_penalty(self, pred_X, pred_E):
         # Define the expected valences for common atom types
         valences = {
-            0: 4,  # Carbon
-            1: 3,  # Nitrogen
-            2: 2,  # Oxygen
-            3: 1,  # Fluorine
-            4: 1,  # Hydrogen
+            0: 1,  # Hydrogen
+            1: 4,  # Carbon
+            2: 3,  # Nitrogen (although nitrogen in nitro groups has valence 5)
+            3: 2,  # Oxygen
+            4: 1,  # Fluorine
         }
 
         # Get predicted atom types as indices of one-hot encoding
@@ -208,11 +208,11 @@ class TrainLossDiscrete(nn.Module):
         """
         # Define the number of valence electrons for common atom types
         valence_electrons = {
-            0: 4,  # Carbon
-            1: 5,  # Nitrogen
-            2: 6,  # Oxygen
-            3: 7,  # Fluorine
-            4: 1,  # Hydrogen
+            0: 1,  # Hydrogen
+            1: 4,  # Carbon
+            2: 5,  # Nitrogen
+            3: 6,  # Oxygen
+            4: 7,  # Fluorine
         }
 
         # Get the total bond order (sum of bond orders)
